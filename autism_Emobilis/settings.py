@@ -14,13 +14,23 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+import environ
+
+# Initialize environment variables
+env = environ.Env(
+    # Set casting, default value
+    DEBUG=(bool, False)
+)
+
+# Read .env file
+environ.Env.read_env()
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0sf88$w0&cztzyas6sez^ctaix=1542$fetm0(47d@0gnkk6mj'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -64,8 +74,8 @@ REST_FRAMEWORK = {
     ],
 }
 AUTHENTICATION_BACKENDS = [
-    'my_app.authentication.EmailOrUsernameModelBackend',  # Custom backend
-    'django.contrib.auth.backends.ModelBackend',  # Default backend (optional)
+    'my_app.authentication.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 
@@ -108,16 +118,20 @@ WSGI_APPLICATION = 'autism_Emobilis.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
+
+# Database configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'autism',
-        'USER': 'postgres',
-        'PASSWORD': 'Post@gres',
-        'HOST': 'localhost', # Set to the actual host if different
-        'PORT': '5432',
+        'ENGINE': env('DATABASE_ENGINE'),
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
     }
 }
+
 
 AUTH_USER_MODEL= 'my_app.CustomUser'
 
